@@ -1,4 +1,4 @@
-package ssh
+package main
 
 import "gosh/pkg/server"
 
