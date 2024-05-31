@@ -2,45 +2,47 @@ package server
 
 import (
 	"errors"
+	"fmt"
+	"gosh/pkg/term"
 	"net"
+	"os"
 
 	"github.com/charmbracelet/log"
 	"github.com/charmbracelet/ssh"
 	"github.com/charmbracelet/wish"
+	"github.com/charmbracelet/wish/bubbletea"
 	"github.com/charmbracelet/wish/logging"
 )
 
 func Run(host, port string) {
+	home, err := os.UserHomeDir()
+	if err != nil {
+		log.Error("Could not start server", "error", err)
+	}
 	srv, err := wish.NewServer(
-		// The address the server will listen to.
 		wish.WithAddress(net.JoinHostPort(host, port)),
-
-		// The SSH server need its own keys, this will create a keypair in the
-		// given path if it doesn't exist yet.
-		// By default, it will create an ED25519 key.
-		wish.WithHostKeyPath("/home/rawa/.ssh/gosh_key"),
-
-		// Middlewares do something on a ssh.Session, and then call the next
-		// middleware in the stack.
+		wish.WithHostKeyPath(fmt.Sprintf("%s/.ssh/gosh_key", home)),
 		wish.WithMiddleware(
+
+			bubbletea.Middleware(term.Serve),
+
 			func(next ssh.Handler) ssh.Handler {
 				return func(sess ssh.Session) {
-					wish.Println(sess, "Hello, world!")
+					wish.Println(sess, "Have a tea :D!")
 					next(sess)
 				}
 			},
 
-			// The last item in the chain is the first to be called.
 			logging.Middleware(),
 		),
 	)
+
 	if err != nil {
 		log.Error("Could not start server", "error", err)
 	}
 
-	log.Info("Starting SSH server", "host", host, "port", port)
+	log.Info("Starting SSH server from air :D", "host", host, "port", port)
 	if err = srv.ListenAndServe(); err != nil && !errors.Is(err, ssh.ErrServerClosed) {
-		// We ignore ErrServerClosed because it is expected.
 		log.Error("Could not start server", "error", err)
 	}
 }

@@ -1,5 +1,5 @@
 run: build
-	@./bin/ssh/main
+	@./bin/term/main
 
 build:
-	@go build -o bin/ssh/main cmd/ssh/main.go
+	@go build -o bin/term/main cmd/term/main.go
