@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"gosh/pkg/term"
 	"net"
-	"os"
 
 	"github.com/charmbracelet/log"
 	"github.com/charmbracelet/ssh"
@@ -15,20 +14,16 @@ import (
 )
 
 func Run(host, port string) {
-	home, err := os.UserHomeDir()
-	if err != nil {
-		log.Error("Could not start server", "error", err)
-	}
 	srv, err := wish.NewServer(
 		wish.WithAddress(net.JoinHostPort(host, port)),
-		wish.WithHostKeyPath(fmt.Sprintf("%s/.ssh/gosh_key", home)),
+		wish.WithHostKeyPath(fmt.Sprintf("./.ssh/gosh_key")),
 		wish.WithMiddleware(
 
 			bubbletea.Middleware(term.Serve),
 
 			func(next ssh.Handler) ssh.Handler {
 				return func(sess ssh.Session) {
-					wish.Println(sess, "Have a tea :D!")
+					wish.Println(sess, "Have a tea xD!")
 					next(sess)
 				}
 			},
@@ -41,7 +36,7 @@ func Run(host, port string) {
 		log.Error("Could not start server", "error", err)
 	}
 
-	log.Info("Starting SSH server from air :D", "host", host, "port", port)
+	log.Info("Starting SSH server from air in docker :D", "host", host, "port", port)
 	if err = srv.ListenAndServe(); err != nil && !errors.Is(err, ssh.ErrServerClosed) {
 		log.Error("Could not start server", "error", err)
 	}

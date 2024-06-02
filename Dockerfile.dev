@@ -1,0 +1,13 @@
+FROM golang:1.22.3-alpine
+
+WORKDIR /src
+
+COPY ./ /src/
+
+RUN go mod download
+
+RUN go install github.com/cosmtrek/air@latest
+
+EXPOSE 23234
+
+ENTRYPOINT [ "air" ]

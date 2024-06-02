@@ -1,0 +1,14 @@
+name: "gosh"
+
+services:
+  server:
+    image: gosh:dev
+    container_name: gosh
+    build:
+      dockerfile: Dockerfile.dev
+    volumes:
+      - type: bind
+        source: ./
+        target: /src/
+    ports:
+      - "23234:23234"

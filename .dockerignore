@@ -1,0 +1,7 @@
+.git
+.gitignore
+bin
+docker-compose.yaml
+Doockerfile.dev
+go.sum
+Makefile
