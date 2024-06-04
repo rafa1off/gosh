@@ -12,3 +12,5 @@ services:
         target: /src/
     ports:
       - "23234:23234"
+    environment:
+      - TERM=tmux-256color
