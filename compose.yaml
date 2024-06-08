@@ -6,10 +6,13 @@ services:
     container_name: gosh
     build:
       dockerfile: Dockerfile.dev
-    volumes:
-      - type: bind
-        source: ./
-        target: /src/
+    develop:
+      watch:
+        - action: rebuild
+          path: ./
+          ignore:
+            - bin/
+            - Makefile
     ports:
       - "23234:23234"
     environment:

@@ -36,7 +36,7 @@ func Run(host, port string) {
 		log.Error("Could not start server", "error", err)
 	}
 
-	log.Info("Starting SSH server from air in docker :D", "host", host, "port", port)
+	log.Info("Starting SSH server from watch :D", "host", host, "port", port)
 	if err = srv.ListenAndServe(); err != nil && !errors.Is(err, ssh.ErrServerClosed) {
 		log.Error("Could not start server", "error", err)
 	}
